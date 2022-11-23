@@ -1,5 +1,10 @@
 features to develop:
 - set level of precision (use how many different characters to make the portrait)
 - set character length (@@ or @@@)
-- turn image to black and white (with np array)
+- turn image to black and white
+    - 3D array, identify who is r, who is g, who is b
+    - function color to greyscale: x = 0.299r + 0.587g + 0.114b.
+    - test function
+    - implement function
+    - test script
 - rescale image (width must be < 500 px)
