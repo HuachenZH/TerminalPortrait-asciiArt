@@ -3,7 +3,8 @@ features to develop:
 - set character length (@@ or @@@)
 - color to grayscale
     - 3D array, identify who is r, who is g, who is b [OK]
-    - function isGrayscale, check if the matrix/image is already grayscaled
+    - function isGrayscale, check if the matrix/image is already grayscaled [OK]
+    - integrate fct isGrayscale
     - function color to greyscale: x = 0.299r + 0.587g + 0.114b.
     - test function
     - implement function
