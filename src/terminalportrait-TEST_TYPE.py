@@ -18,11 +18,24 @@ def isGrayscale(array: np.array) -> bool:
 
     '''
     if array.shape == 2: # if the rgb matrix contains only two dimensions
-        return True
+        return True # then normally it's already gray scale
     # else, three dimensions
     # check for one given pixel, if r, g, b three values are the same
-    # if total number of pixel < 1000, check them all
-    # else check 5% of total pixels
+    
+    # totalPixel = 1
+    # for v in array.shape:
+    #     totalPixel *= v
+    # totalPixel = totalPixel/3
+    # print("Total pixel is %s" % str(totalPixel))
+    
+    # check all pixels
+    for iline in range(arr.shape[0]):
+        for icol in range(arr.shape[1]):
+            if arr[iline][icol][0] == arr[iline][icol][1] and arr[iline][icol][1] == arr[iline][icol][2]:
+                pass
+            else:
+                return False # not grayscale
+    return True
 
 
 
@@ -32,7 +45,8 @@ def isGrayscale(array: np.array) -> bool:
 img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
 # image to rgb matrix. The matrix can be three dimensions or two.
 arr = np.array(img)
-print(arr[0][0])
+# print(arr[0][0])
+print(arr.shape)
 
 
 
@@ -40,6 +54,7 @@ print(arr[0][0])
 
 if len(arr.shape)==3: # rgb matrix is three dimension
     # check if the matrix is already grayscaled. If yes, we cant reapply the color to grayscale equation
+    print(isGrayscale(arr))
     arr2D = arr[:,:,0]
     arr2D_rescale = arr2D.copy()//37
     print(np.amax(arr2D_rescale))
