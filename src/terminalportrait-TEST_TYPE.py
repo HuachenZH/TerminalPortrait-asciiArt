@@ -52,15 +52,21 @@ print(arr.shape)
 
 # print(arr[719][0])
 
-if len(arr.shape)==3: # rgb matrix is three dimension
-    # check if the matrix is already grayscaled. If yes, we cant reapply the color to grayscale equation
-    print(isGrayscale(arr))
-    arr2D = arr[:,:,0]
-    arr2D_rescale = arr2D.copy()//37
-    print(np.amax(arr2D_rescale))
-else:
-    arr2D_rescale = arr.copy()//37
+# if len(arr.shape)==3: # rgb matrix is three dimension
+#     # check if the matrix is already grayscaled. If yes, we cant reapply the color to grayscale equation
+#     print(isGrayscale(arr))
+#     arr2D = arr[:,:,0]
+#     arr2D_rescale = arr2D.copy()//37
+#     print(np.amax(arr2D_rescale))
+# else:
+#     arr2D_rescale = arr.copy()//37
 
+# check if the matrix is already grayscale. If not, transform to grayscale. If yes, do nothing.
+if isGrayscale(arr)==False: # is not grayscale
+    # transform to grayscale
+    # define in a function
+
+# Now the matrix is grayscale, divided by...
 
 
 # payload=''
