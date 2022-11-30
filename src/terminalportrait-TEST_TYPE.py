@@ -8,7 +8,7 @@ def isGrayscale(array: np.array) -> bool:
 
     Parameters
     ----------
-    array : np.array
+    array : np.array uint8
         The rgb matrix.
 
     Returns
@@ -38,6 +38,25 @@ def isGrayscale(array: np.array) -> bool:
     return True
 
 
+def color2grayscale(colorArray: np.array) -> np.array:
+    '''
+    Transform a colored rgb matrix to grayscale.
+
+    Parameters
+    ----------
+    colorArray : np.array of uint8
+        The colored rgb matrix. 
+        Normally it has 3 dimensions: 
+        Width and height correspond to the pixel size of image. It has three pages, corresponding to the R,G,B three colors.
+
+    Returns
+    -------
+    np.array of uint8
+        The grayscale matrix, two dimensions.
+
+    '''
+    # equation color to grayscale : color to greyscale: x = 0.299r + 0.587g + 0.114b.
+    return (colorArray[:,:,0]*0.299 + colorArray[:,:,1]*0.587 + colorArray[:,:,2]*0.114).astype(np.uint8)
 
 
 #%% 
@@ -63,9 +82,12 @@ print(arr.shape)
 
 # check if the matrix is already grayscale. If not, transform to grayscale. If yes, do nothing.
 if isGrayscale(arr)==False: # is not grayscale
+    print("[*] The input image is not grayscale. Transforming to grayscale...")
     # transform to grayscale
-    # define in a function
-
+    arr_gray = color2grayscale(arr)
+    print("[*] Done")
+else:
+    print("[*] The input image is already grayscale")
 # Now the matrix is grayscale, divided by...
 
 
