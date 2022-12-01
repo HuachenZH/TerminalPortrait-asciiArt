@@ -1,6 +1,6 @@
 features to develop:
 - set level of precision (use how many different characters to make the portrait)
-- set character length (@@ or @@@)
+- set character length (@@ or @@@), depending on input image size
 - color to grayscale
     - 3D array, identify who is r, who is g, who is b [OK]
     - function isGrayscale, check if the matrix/image is already grayscaled [OK]
@@ -11,3 +11,4 @@ features to develop:
         - use mapping dictionary instead of if ?
     - test script
 - rescale image (width must be < 500 px)
+- give arguments in command line (like -sV, -lash, -d 'data'), no need to open and modify the script
