@@ -17,7 +17,7 @@ def isGrayscale(array: np.array) -> bool:
         Return True if array is grayscale. False if array is colored
 
     '''
-    if array.shape == 2: # if the rgb matrix contains only two dimensions
+    if len(array.shape) == 2: # if the rgb matrix contains only two dimensions
         return True # then normally it's already gray scale
     # else, three dimensions
     # check for one given pixel, if r, g, b three values are the same
@@ -61,7 +61,7 @@ def color2grayscale(colorArray: np.array) -> np.array:
 
 #%% 
 # read image
-img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
+img = Image.open("C:\\Users\\eziod\\Documents\\yy.jfif")
 # image to rgb matrix. The matrix can be three dimensions or two.
 arr = np.array(img)
 # print(arr[0][0])
@@ -87,31 +87,29 @@ if isGrayscale(arr)==False: # is not grayscale
     arr_gray = color2grayscale(arr)
     print("[*] Done")
 else:
+    arr_gray = arr
     print("[*] The input image is already grayscale")
+
 # Now the matrix is grayscale, divided by...
+ink = '@MX$%=+-;:,.'
+inkDensity = 3
+levels = len(ink)
+arr_rescale = arr_gray//(255//levels+1) # the value of arr_rescale varies from 0 to levels-1
+
+# construct a mapping dictionary
+mappingDict = {i: ink[i] for i in range(len(ink))}
+
+# construct the output string
+res = ''
+for line in arr_rescale:
+    for score in line:
+        for i in range(inkDensity):
+            res += mappingDict[score]
+    res += '\n'
 
 
-# payload=''
-
-# for line in arr2D_rescale:
-#     for score in line:
-#         if score==6:
-#             payload += ",,"
-#         if score==5:
-#             payload += "--"
-#         if score==4:
-#             payload += ";;"
-#         if score==3:
-#             payload += "//"
-#         if score==2:
-#             payload += "XX"
-#         if score==1:
-#             payload += "MM"
-#         if score==0:
-#             payload += "@@"
-#     payload += "\n"
-
-
-# text_file = open("data4_2_b.txt", "w")
-# text_file.write(payload)
-# text_file.close()
+# write to file
+fileName = "Test-Type.txt"
+text_file = open(fileName, "w")
+text_file.write(res)
+text_file.close()
