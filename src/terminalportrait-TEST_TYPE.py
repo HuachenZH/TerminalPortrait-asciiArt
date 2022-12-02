@@ -124,6 +124,38 @@ def rescaleMatrix(arr_gray: np.array, levels: int) -> np.array:
 
 
 
+def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
+    '''
+    Construct the output string.
+
+    Parameters
+    ----------
+    arr_rescale : np.array
+        The rescaled matrix.
+    ink : str
+        Which characters will we use.
+        For example, we can use @ or M for the densest pixels, use - or . for the thinnest pixels.
+    inkDensity : int
+        Each character will repeat how many times.
+
+    Returns
+    -------
+    str
+        The output string which will be written in a txt file.
+
+    '''
+    # construct a mapping dictionary
+    mappingDict = {i: ink[i] for i in range(len(ink))}
+    # construct the output string
+    canvas = ''
+    for line in arr_rescale:
+        for score in line:
+            for i in range(inkDensity):
+                canvas += mappingDict[score]
+        canvas += '\n'
+    return canvas
+
+
 #%% 
 # read image
 img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
@@ -132,35 +164,22 @@ arr = np.array(img)
 # print(arr[0][0])
 print("[*] The shape is %s" % str(arr.shape))
 
-
-
 # The grayscale matrix
 arr_gray = grayMatrix(arr)
 
-
-
-# Now the matrix is grayscale, divided by...
+# prepare ink before painting
 ink = '@MX$%=+-;:,.'
 inkDensity = 3
 levels = len(ink) # how many levels are there.
-# arr_rescale = arr_gray//(255//levels+1) # the value of arr_rescale varies from 0 to levels-1
+
+# After preparing the ink, rescale the grayscale matrix.
 arr_rescale = rescaleMatrix(arr_gray, levels)
 
-
-# construct a mapping dictionary
-mappingDict = {i: ink[i] for i in range(len(ink))}
-
 # construct the output string
-res = ''
-for line in arr_rescale:
-    for score in line:
-        for i in range(inkDensity):
-            res += mappingDict[score]
-    res += '\n'
-
+canvas = painting(arr_rescale, ink, inkDensity)
 
 # write to file
 fileName = "Test-Type.txt"
 text_file = open(fileName, "w")
-text_file.write(res)
+text_file.write(canvas)
 text_file.close()
