@@ -34,6 +34,47 @@ def isGrayscale(array: np.array) -> bool:
     return True
 
 
+def grayMatrix(arr: np.array) -> np.array:
+    '''
+    Create the grayscale matrix.
+    Concretly, there are several cases of the input array arr:
+        - arr is two dimensional, then normally it s already grayscale
+        - arr is three dimensional:
+            - arr is already grayscale, the three pages are the same (this is rare but it exists)
+            - arr is not grayscale, it s colored
+        All of the cases above wil be treated.
+
+    Parameters
+    ----------
+    arr : np.array
+        The numpy array read from input image.
+
+    Returns
+    -------
+    arr_gray : np.array
+        A numpy array in grayscale, two dimensional.
+
+    '''
+    if len(arr.shape) == 2: # if the matrix has two dimensions, then normally it's already grayscale
+        arr_gray = arr
+        print("[*] The input image is already grayscale. Matrix dimension 2")
+    elif len(arr.shape) == 3: # the matrix has three dimensions. It's still possible that it's already grayscale
+        if isGrayscale(arr): # is grayscale but the matrix has three dimensions.
+            print("[*] The input image is already grayscale. However it has three dimensions... Dimensional strike!")
+            arr_gray = arr[:,:,0]
+            print("[*] Cleared. Target is now two dimensional.")
+        else: # is not grayscale. Transform to grayscale by using the equation
+            print("[*] The input image is not grayscale. Transforming to grayscale...")
+            # transform to grayscale
+            arr_gray = color2grayscale(arr)
+            print("[*] Done")
+    else: # the matrix has one or more than three dimensions. Then raise an error
+        print("[!] Matrix dimension incorrect, it's shape of %s" % str(arr.shape))
+        raise ValueError("Matrix dimension incorrect. Error with input image. Matrix shape is %s.")
+    return arr_gray
+
+
+
 def color2grayscale(colorArray: np.array) -> np.array:
     '''
     Transform a colored rgb matrix to grayscale.
@@ -65,23 +106,10 @@ print("[*] The shape is %s" % str(arr.shape))
 
 
 
+# The grayscale matrix
+arr_gray = grayMatrix(arr)
 
-# check grayscale
-if len(arr.shape) == 2: # if the matrix has two dimensions, then normally it's already grayscale
-    arr_gray = arr
-    print("[*] The input image is already grayscale. Matrix dimension 2")
-elif len(arr.shape) == 3: # the matrix has three dimensions. It's still possible that it's already grayscale
-    if isGrayscale(arr): # is grayscale but the matrix has three dimensions.
-        print("[*] The input image is already grayscale. However it has three dimensions... Dimensional strike!")
-        arr_gray = arr[:,:,0]
-        print("[*] Cleared. Target is now two dimensional.")
-    else: # is not grayscale. Transform to grayscale by using the equation
-        print("[*] The input image is not grayscale. Transforming to grayscale...")
-        # transform to grayscale
-        arr_gray = color2grayscale(arr)
-        print("[*] Done")
-else: # the matrix has one or more than three dimensions
-    print("[!] Matrix dimension incorrect. Error with input image. Matrix shape is %s." % str(arr.shape))
+
 
 # Now the matrix is grayscale, divided by...
 ink = '@MX$%=+-;:,.'
