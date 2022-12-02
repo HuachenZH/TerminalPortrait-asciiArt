@@ -1,13 +1,14 @@
 features to develop:
 - set level of precision (use how many different characters to make the portrait)
 - set character length (@@ or @@@), depending on input image size. I call it inkDensity.
-- color to grayscale
+- color to grayscale [OK]
     - 3D array, identify who is r, who is g, who is b [OK]
     - function isGrayscale, check if the matrix/image is already grayscaled [OK]
     - integrate fct isGrayscale [OK]
     - function color to greyscale: x = 0.299r + 0.587g + 0.114b. [OK]
-    - implement the function
+    - implement the function [OK]
         - divided by... (set levels) 
-        - use mapping dictionary instead of if ?
-    - test script
+        - use mapping dictionary instead of if
+    - test script [OK]
 - rescale image (width must be < 500 px)
+- restructure code, wrap in fct
