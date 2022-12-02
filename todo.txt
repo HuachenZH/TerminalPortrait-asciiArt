@@ -12,3 +12,4 @@ features to develop:
     - test script [OK]
 - rescale image (width must be < 500 px)
 - restructure code, wrap in fct
+- a progress bar may be cool
