@@ -61,20 +61,10 @@ img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
 # image to rgb matrix. The matrix can be three dimensions or two.
 arr = np.array(img)
 # print(arr[0][0])
-print(arr.shape)
+print("[*] The shape is %s" % str(arr.shape))
 
 
 
-# print(arr[719][0])
-
-# if len(arr.shape)==3: # rgb matrix is three dimension
-#     # check if the matrix is already grayscaled. If yes, we cant reapply the color to grayscale equation
-#     print(isGrayscale(arr))
-#     arr2D = arr[:,:,0]
-#     arr2D_rescale = arr2D.copy()//37
-#     print(np.amax(arr2D_rescale))
-# else:
-#     arr2D_rescale = arr.copy()//37
 
 # check grayscale
 if len(arr.shape) == 2: # if the matrix has two dimensions, then normally it's already grayscale
