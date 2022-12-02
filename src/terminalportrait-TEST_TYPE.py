@@ -2,13 +2,13 @@ import numpy as np
 from PIL import Image
 
 #%% functions
-def isGrayscale(array: np.array) -> bool:
+def isGrayscale(arr: np.array) -> bool:
     '''
     Check if the rgb matrix is already grayscale. 
 
     Parameters
     ----------
-    array : np.array uint8
+    arr : np.array uint8
         The rgb matrix.
         Normally it has three dimensions. This function will check again.
 
@@ -18,7 +18,7 @@ def isGrayscale(array: np.array) -> bool:
         Return True if array is grayscale. False if array is colored
 
     '''
-    if len(array.shape) == 2: # if the rgb matrix contains only two dimensions
+    if len(arr.shape) == 2: # if the rgb matrix contains only two dimensions
         return True # then normally it's already gray scale
     # else, three dimensions
     # check for one given pixel, if r, g, b three values are the same
@@ -156,30 +156,39 @@ def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
     return canvas
 
 
-#%% 
-# read image
-img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
-# image to rgb matrix. The matrix can be three dimensions or two.
-arr = np.array(img)
-# print(arr[0][0])
-print("[*] The shape is %s" % str(arr.shape))
+#%% main
+def main():
+    # read image
+    img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
+    # image to rgb matrix. The matrix can be three dimensions or two.
+    arr = np.array(img)
+    # print(arr[0][0])
+    print("[*] The shape is %s" % str(arr.shape))
+    
+    # The grayscale matrix
+    arr_gray = grayMatrix(arr)
+    
+    # prepare ink before painting
+    print("[*] Preparing ink.")
+    ink = '@MX$%=+-;:,.'
+    inkDensity = 3
+    levels = len(ink) # how many levels are there.
+    
+    # After preparing the ink, rescale the grayscale matrix.
+    arr_rescale = rescaleMatrix(arr_gray, levels)
+    
+    # construct the output string
+    print("[*] Painting...")
+    canvas = painting(arr_rescale, ink, inkDensity)
+    print("[*] Done!")
+    
+    # write to file
+    fileName = "Test-Type.txt"
+    text_file = open(fileName, "w")
+    text_file.write(canvas)
+    text_file.close()
+    print("Successfully written to %s" % fileName)
 
-# The grayscale matrix
-arr_gray = grayMatrix(arr)
-
-# prepare ink before painting
-ink = '@MX$%=+-;:,.'
-inkDensity = 3
-levels = len(ink) # how many levels are there.
-
-# After preparing the ink, rescale the grayscale matrix.
-arr_rescale = rescaleMatrix(arr_gray, levels)
-
-# construct the output string
-canvas = painting(arr_rescale, ink, inkDensity)
-
-# write to file
-fileName = "Test-Type.txt"
-text_file = open(fileName, "w")
-text_file.write(canvas)
-text_file.close()
+#%% true main
+if __name__ == "__main__":
+    main()
