@@ -34,6 +34,29 @@ def isGrayscale(array: np.array) -> bool:
     return True
 
 
+
+def color2grayscale(colorArray: np.array) -> np.array:
+    '''
+    Transform a colored rgb matrix to grayscale.
+
+    Parameters
+    ----------
+    colorArray : np.array of uint8
+        The colored rgb matrix. 
+        Normally it has 3 dimensions: 
+        Width and height correspond to the pixel size of image. It has three pages, corresponding to the R,G,B three colors.
+
+    Returns
+    -------
+    np.array of uint8
+        The grayscale matrix, two dimensions.
+
+    '''
+    # equation color to grayscale : color to greyscale: x = 0.299r + 0.587g + 0.114b.
+    return (colorArray[:,:,0]*0.299 + colorArray[:,:,1]*0.587 + colorArray[:,:,2]*0.114).astype(np.uint8)
+
+
+
 def grayMatrix(arr: np.array) -> np.array:
     '''
     Create the grayscale matrix.
@@ -75,25 +98,30 @@ def grayMatrix(arr: np.array) -> np.array:
 
 
 
-def color2grayscale(colorArray: np.array) -> np.array:
+def rescaleMatrix(arr_gray: np.array, levels: int) -> np.array:
     '''
-    Transform a colored rgb matrix to grayscale.
+    Rescale the grayscale matrix.
+    The new values will be 0, 1, 2 ... n 
+    with n: number of levels minus 1 
 
     Parameters
     ----------
-    colorArray : np.array of uint8
-        The colored rgb matrix. 
-        Normally it has 3 dimensions: 
-        Width and height correspond to the pixel size of image. It has three pages, corresponding to the R,G,B three colors.
+    arr_gray : np.array
+        The grayscale matrix.
+    levels : int
+        How many levels are there. Equals to the length of our ink.
 
     Returns
     -------
-    np.array of uint8
-        The grayscale matrix, two dimensions.
+    np.array
+        The rescaled matrix.
 
     '''
-    # equation color to grayscale : color to greyscale: x = 0.299r + 0.587g + 0.114b.
-    return (colorArray[:,:,0]*0.299 + colorArray[:,:,1]*0.587 + colorArray[:,:,2]*0.114).astype(np.uint8)
+    # 255//levels+1 might be hard for understanding. 
+    # It can also be written as arr_gray//math.ceil(255/levels)
+    # The value of arr_rescale varies from 0 to levels-1
+    return arr_gray//(255//levels+1) 
+
 
 
 #%% 
@@ -114,8 +142,10 @@ arr_gray = grayMatrix(arr)
 # Now the matrix is grayscale, divided by...
 ink = '@MX$%=+-;:,.'
 inkDensity = 3
-levels = len(ink)
-arr_rescale = arr_gray//(255//levels+1) # the value of arr_rescale varies from 0 to levels-1
+levels = len(ink) # how many levels are there.
+# arr_rescale = arr_gray//(255//levels+1) # the value of arr_rescale varies from 0 to levels-1
+arr_rescale = rescaleMatrix(arr_gray, levels)
+
 
 # construct a mapping dictionary
 mappingDict = {i: ink[i] for i in range(len(ink))}
