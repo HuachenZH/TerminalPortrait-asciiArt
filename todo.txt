@@ -14,3 +14,8 @@ features to develop:
 - restructure code, wrap in fct [OK]
 - a progress bar may be cool
 - call the script from terminal, no need to open the script then run
+    - try using argparse, analyse fonctionnelle
+        - the script can be run in the terminal like: $ python test-type.py -i inputpath -o outputpath
+        - which arguments are required ? >>> input image (path+name), output (path+name), ink level, ink density
+        - so it will be like: $ python test-type.py -i inputpath -o outputpath -l inkLevel -d inkDensity
+        - to make it simple, lets suppose both paths are absolute path
