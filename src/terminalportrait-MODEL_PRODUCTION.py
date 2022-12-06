@@ -1,19 +1,23 @@
 import numpy as np
 from PIL import Image
+import argparse
 
 #%% functions
 def isGrayscale(arr: np.array) -> bool:
     '''
     Check if the rgb matrix is already grayscale. 
+
     Parameters
     ----------
     arr : np.array uint8
         The rgb matrix.
         Normally it has three dimensions. This function will check again.
+
     Returns
     -------
     bool
         Return True if array is grayscale. False if array is colored
+
     '''
     if len(arr.shape) == 2: # if the rgb matrix contains only two dimensions
         return True # then normally it's already gray scale
@@ -35,16 +39,19 @@ def isGrayscale(arr: np.array) -> bool:
 def color2grayscale(colorArray: np.array) -> np.array:
     '''
     Transform a colored rgb matrix to grayscale.
+
     Parameters
     ----------
     colorArray : np.array of uint8
         The colored rgb matrix. 
         Normally it has 3 dimensions: 
         Width and height correspond to the pixel size of image. It has three pages, corresponding to the R,G,B three colors.
+
     Returns
     -------
     np.array of uint8
         The grayscale matrix, two dimensions.
+
     '''
     # equation color to grayscale : color to greyscale: x = 0.299r + 0.587g + 0.114b.
     return (colorArray[:,:,0]*0.299 + colorArray[:,:,1]*0.587 + colorArray[:,:,2]*0.114).astype(np.uint8)
@@ -60,14 +67,17 @@ def grayMatrix(arr: np.array) -> np.array:
             - arr is already grayscale, the three pages are the same (this is rare but it exists)
             - arr is not grayscale, it s colored
         All of the cases above wil be treated.
+
     Parameters
     ----------
     arr : np.array
         The numpy array read from input image.
+
     Returns
     -------
     arr_gray : np.array
         A numpy array in grayscale, two dimensional.
+
     '''
     if len(arr.shape) == 2: # if the matrix has two dimensions, then normally it's already grayscale
         arr_gray = arr
@@ -94,16 +104,19 @@ def rescaleMatrix(arr_gray: np.array, levels: int) -> np.array:
     Rescale the grayscale matrix.
     The new values will be 0, 1, 2 ... n 
     with n: number of levels minus 1 
+
     Parameters
     ----------
     arr_gray : np.array
         The grayscale matrix.
     levels : int
         How many levels are there. Equals to the length of our ink.
+
     Returns
     -------
     np.array
         The rescaled matrix.
+
     '''
     # 255//levels+1 might be hard for understanding. 
     # It can also be written as arr_gray//math.ceil(255/levels)
@@ -115,6 +128,7 @@ def rescaleMatrix(arr_gray: np.array, levels: int) -> np.array:
 def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
     '''
     Construct the output string.
+
     Parameters
     ----------
     arr_rescale : np.array
@@ -124,10 +138,12 @@ def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
         For example, we can use @ or M for the densest pixels, use - or . for the thinnest pixels.
     inkDensity : int
         Each character will repeat how many times.
+
     Returns
     -------
     str
         The output string which will be written in a txt file.
+
     '''
     # construct a mapping dictionary
     mappingDict = {i: ink[i] for i in range(len(ink))}
@@ -135,16 +151,33 @@ def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
     canvas = ''
     for line in arr_rescale:
         for score in line:
-            for i in range(inkDensity):
+            for i in range(int(inkDensity)):
                 canvas += mappingDict[score]
         canvas += '\n'
     return canvas
 
 
+
+def getArgs() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description='Test Type.')
+    parser.add_argument('-i','--input', help='Input file name, with absolute path',required=True)
+    parser.add_argument('-o','--output',help='Output file name, with absolute path', required=True)
+    parser.add_argument('-l','--levelofink',help='Level of ink (use how many different characters)',required=True)
+    parser.add_argument('-d','--densityofink',help='density of ink (each character repeat how many times)',required=True)
+    args = parser.parse_args()
+    return args
+
+
+
+
 #%% main
 def main():
+    args = getArgs()
     # read image
-    img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg")
+    # img = Image.open("C:\\Users\\eziod\\Documents\\yy3.jpg") # this works
+    # img = Image.open("C:/Users/eziod/Documents/yy3.jpg") # this works
+    # img = Image.open(r"C:\Users\eziod\Documents\yy3.jpg") # this works
+    img = Image.open(args.input)
     # image to rgb matrix. The matrix can be three dimensions or two.
     arr = np.array(img)
     # print(arr[0][0])
@@ -155,8 +188,17 @@ def main():
     
     # prepare ink before painting
     print("[*] Preparing ink.")
-    ink = '@MX$%=+-;:,.'
-    inkDensity = 3
+    inkPalette = {"12":"@MX$%=+-;:,.",
+                  "11":"@M$%=+-;:,.",
+                  "10":"@M$%=+-;,.",
+                  "9":"@M%=+-;,.",
+                  "8":"@M%=+-;.",
+                  "7":"@M%=-;.",
+                  "6":"@M%=;.",
+                  "5":"@M%=.",
+                  "4":"@%=.",
+                  "3":"@=."}
+    ink = inkPalette[args.levelofink]
     levels = len(ink) # how many levels are there.
     
     # After preparing the ink, rescale the grayscale matrix.
@@ -164,16 +206,26 @@ def main():
     
     # construct the output string
     print("[*] Painting...")
-    canvas = painting(arr_rescale, ink, inkDensity)
+    canvas = painting(arr_rescale, ink, args.densityofink)
     print("[*] Done!")
     
     # write to file
-    fileName = "Test-Type.txt"
-    text_file = open(fileName, "w")
+    if '\\' in args.output:
+        filename = args.output.split('\\').pop()
+        outpath = args.output[0:args.output.find(filename)]
+    elif '/' in args.output:
+        filename = args.output.split('/')[-1]
+        outpath = '/'.join(args.output.split('/')[:-1])
+    else:
+        print('path error')
+    # fileName = "Test-Type1.txt"
+    text_file = open(filename, "w")
     text_file.write(canvas)
     text_file.close()
-    print("Successfully written to %s" % fileName)
+    print("Successfully written to %s" % filename)
 
 #%% true main
 if __name__ == "__main__":
     main()
+# to test the script:
+# $ python terminalportrait-TEST_TYPE.py -i "C:\Users\eziod\Documents\yy3.jpg" -o "D:\full_stack\py\TerminalPortrait\src\out.txt" -l 12 -d 2
