@@ -8,3 +8,4 @@ args = parser.parse_args()
 ## show values ##
 print ("Input file: %s" % args.input )
 print ("Output file: %s" % args.output )
+print("type of args %s" % type(args))
