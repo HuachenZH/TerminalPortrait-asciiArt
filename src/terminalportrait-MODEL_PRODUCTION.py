@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageEnhance
 import argparse
 
 #%% functions
@@ -159,14 +159,49 @@ def painting(arr_rescale: np.array, ink: str, inkDensity:int) -> str:
 
 
 def getArgs() -> argparse.Namespace:
+    '''
+    Get arguments from terminal.
+
+    Returns
+    -------
+    args : argparse.Namespace
+        argparse.Namespace object.
+
+    '''
     parser = argparse.ArgumentParser(description='Test Type.')
     parser.add_argument('-i','--input', help='Input file name, with absolute path',required=True)
     parser.add_argument('-o','--output',help='Output file name, with absolute path', required=True)
     parser.add_argument('-l','--levelofink',help='Level of ink (use how many different characters)',required=True)
     parser.add_argument('-d','--densityofink',help='density of ink (each character repeat how many times)',required=True)
+    parser.add_argument('-c','--contrastfactor',help='contrast facter. Original is 1. For higher contrast, >1')
     args = parser.parse_args()
     return args
 
+
+
+def adjustContrast(img, factor:float):
+    '''
+    Adjust the contrast of image
+
+    Parameters
+    ----------
+    img : PIL.Image.Image
+        Input image.
+    factor : float
+        Contrast factor.
+        1 for original
+        >1 for higher contrast
+        <1 for lower contrast
+
+    Returns
+    -------
+    im_output : PIL.Image.Image
+        Contrast adjusted image.
+
+    '''
+    enhancer = ImageEnhance.Contrast(img)
+    im_output = enhancer.enhance(factor) # type is PIL.Image.Image
+    return im_output
 
 
 
@@ -178,6 +213,10 @@ def main():
     # img = Image.open("C:/Users/eziod/Documents/yy3.jpg") # this works
     # img = Image.open(r"C:\Users\eziod\Documents\yy3.jpg") # this works
     img = Image.open(args.input)
+    
+    if args.contrastfactor is not None: # if contrast factor is set, then adjust contrast level
+        img = adjustContrast(img,float(args.contrastfactor))
+    
     # image to rgb matrix. The matrix can be three dimensions or two.
     arr = np.array(img)
     # print(arr[0][0])
@@ -188,16 +227,19 @@ def main():
     
     # prepare ink before painting
     print("[*] Preparing ink.")
-    inkPalette = {"12":"@MX$%=+-;:,.",
-                  "11":"@M$%=+-;:,.",
-                  "10":"@M$%=+-;,.",
-                  "9":"@M%=+-;,.",
-                  "8":"@M%=+-;.",
-                  "7":"@M%=-;.",
-                  "6":"@M%=;.",
-                  "5":"@M%=.",
-                  "4":"@%=.",
-                  "3":"@=."}
+    inkPalette = {
+                  "14":"@MN§$%¤eo+;:,.",
+                  "13":"@MN§$%¤o+;:,.",
+                  "12":"@MN$%¤o+;:,.",
+                  "11":"@M$%¤o+;:,.",
+                  "10":"@M$%¤o+:,.",
+                  "9" :"@M$%o+:,.",
+                  "8" :"@M$%o:,.",
+                  "7" :"@$%o:,.",
+                  "6" :"@$o:,.",
+                  "5" :"@$o:.",
+                  "4" :"@o:.",
+                  "3" :"@o:"}
     ink = inkPalette[args.levelofink]
     levels = len(ink) # how many levels are there.
     
