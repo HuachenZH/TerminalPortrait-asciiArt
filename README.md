@@ -20,7 +20,9 @@ Real example:
 
 ## Explanation
 Scripts are in src. Order of developpement: PROTOTYPE, TEST_TYPE, MODEL_PRODUCTION.  
-PROTOTYPE is the "core" script. Based on PROTOTYPE, I added features in TEST_TYPE and MODEL_PRODUCTION. MODEL_PRODUCTION is the final version.  
+PROTOTYPE is the "core" script.  
+Based on PROTOTYPE, I created TEST_TYPE which is restructured and cleaner.  
+Based on TEST_TYPE, I added features and created MODEL_PRODUCTION, which is the final version.  
 Technically the project is not complicate. It consists of:
 - Read image.  
 - Adjust contrast level.
