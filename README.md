@@ -5,8 +5,8 @@ A personal project (so the naming is not serious). Use string to make image. Ins
 
 
 ## Usage
-cd to the directory of terminalportrait-MODEL_PRODUCTION.py
-    $ python terminalportrait-MODEL_PRODUCTION.py -i *input_file* -o *output_file* -l *level* -d *density* -c *contrast_factor*
+cd to the directory of terminalportrait-MODEL_PRODUCTION.py  
+    `$ python terminalportrait-MODEL_PRODUCTION.py -i *input_file* -o *output_file* -l *level* -d *density* -c *contrast_factor*`
 - -i *input_file* : Precise the input image file. Needs absolute path. Needs to be quoted. Needs to precise the filename.  
 e.g.: "D:\pictures\input_image.jpg". Can use either backslash or slash.
 - -o *output_file* : Precise the output text file. Needs absolute path. Needs to be quoted. Needs to precise the filename.  
@@ -16,7 +16,7 @@ e.g.: "D:\docs\output.txt". Can use either backslash or slash.
 - -c *contrast_factor*: Optional argument, set the contrast factor. Must be float. The script runs better if the input image has more contrast.  
 
 Real example:  
-    $ python terminalportrait-MODEL_PRODUCTION.py -i "D:\input.jfif" -o "D:/output.txt" -l 14 -d 2 -c 2  
+    `$ python terminalportrait-MODEL_PRODUCTION.py -i "D:\input.jfif" -o "D:/output.txt" -l 14 -d 2 -c 2  `
 
 ## Explanation
 Scripts are in src. Order of developpement: PROTOTYPE, TEST_TYPE, MODEL_PRODUCTION.  
