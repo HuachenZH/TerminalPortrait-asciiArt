@@ -1,7 +1,7 @@
 # TerminalPortrait
 
 ## Description
-A personal project (so the naming is not serious). Use string to make image. Inspired by the logo when opening msfconsole.  
+A personal project (so the namings are not serious). Use string to make image. Inspired by the logo when opening msfconsole. (I knew later that this is called ascii art)
 Try with example.txt, open with Notepad, zoom out to 20% or 30%.
 
 ## Usage
