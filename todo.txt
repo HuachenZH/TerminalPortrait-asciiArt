@@ -20,3 +20,7 @@ features to develop:
         - so it will be like: $ python test-type.py -i inputpath -o outputpath -l inkLevel -d inkDensity
         - to make it simple, lets suppose both paths are absolute path
 - it's running well... however the input image need to be high contrasted :(
+
+
+Bug to be fixed:
+- output file is always in src
