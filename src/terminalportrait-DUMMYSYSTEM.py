@@ -45,6 +45,25 @@ def is_grayscale(arr: np.ndarray) -> bool:
 
 
 
+def resize_image(img: Image.Image, max_width: int = 100) -> Image.Image:
+    """Resize image while maintaining aspect ratio.
+    
+    Args:
+        img: Input PIL Image
+        max_width: Maximum width for the output image
+        
+    Returns:
+        Resized PIL Image
+    """
+    width, height = img.size
+    if width > max_width:
+        ratio = max_width / width
+        new_height = int(height * ratio)
+        return img.resize((max_width, new_height), Image.LANCZOS)
+    return img
+
+
+
 def color_to_grayscale(color_array: np.ndarray) -> np.ndarray:
     """Convert RGB array to grayscale using standard weights."""
     return np.dot(color_array[..., :3], [0.299, 0.587, 0.114]).astype(np.uint8)
@@ -98,6 +117,9 @@ def main():
     try:
         # Load and process image
         img = Image.open(args.input)
+        print(f"input size is {str(img.size)}")
+        img = resize_image(img, 200)
+        breakpoint()
         if args.contrast != 1.0:
             img = adjust_contrast(img, args.contrast)
             
@@ -127,4 +149,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_118_x_83.jpg -o ../out/marriage_118_x_83.txt -l special -d 1 -c 1.2
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.txt -l special -d 1 -c 1.2
