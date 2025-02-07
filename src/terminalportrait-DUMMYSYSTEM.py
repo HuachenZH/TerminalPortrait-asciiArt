@@ -17,7 +17,8 @@ INK_PALETTE = {
     "6": "@$o:,.",
     "5": "@$o:.",
     "4": "@o:.",
-    "3": "@o:"
+    "3": "@o:",
+    "special": "冉伊诺陈"
 }
 
 
@@ -126,4 +127,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/qingban.png -o ../out/qingban.txt -l 12 -d 2 -c 1.2
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_118_x_83.jpg -o ../out/marriage_118_x_83.txt -l special -d 1 -c 1.2
