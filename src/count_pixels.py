@@ -1,24 +1,27 @@
 import cv2
+import numpy as np
 
-# Load the image from a file
-image = cv2.imread('../data/qingban.png')
+def main():
+    try:
+        # Load the image from a file
+        arr_image = cv2.imread('../data/chen.jpg')
+        
+        if arr_image is None:
+            raise FileNotFoundError("Image not found or unable to load")
 
-if not image:
-    print("Image not found")
-else:
-    # Convert to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # Convert to grayscale
+        arr_gray = cv2.cvtColor(arr_image, cv2.COLOR_BGR2GRAY)
 
-    # Binarize the image using Otsu's method for automatic thresholding
-    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_LUT)
+        # Count pixels
+        white_pixels = cv2.countNonZero(arr_gray)
+        black_pixels = arr_gray.size - white_pixels
 
-    # Remove small white regions (using erosion to remove noise)
-    kernel = np.ones((3,3), dtype='uint8')
-    eroded = cv2.erode(thresh, kernel, iterations=1)
+        print("Black Pixels:", black_pixels)
+        print("White Pixels:", white_pixels)
+        print(f"Black Percentage: {black_pixels/arr_gray.size:.2%}")
 
-    # Count the number of black and white pixels
-    black_pixels = cv2.countNonZero(eroded) if np.isin(255, eroded).any() else 0
-    white_pixels = eroded.sum() if not np.isin(0, eroded).any() else 0
+    except Exception as e:
+        print(f"Error: {e}")
 
-    print("Black Pixels:", black_pixels)
-    print("White Pixels:", white_pixels)
+if __name__ == "__main__":
+    main()
