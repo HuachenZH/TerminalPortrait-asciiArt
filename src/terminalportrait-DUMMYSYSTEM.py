@@ -2,6 +2,9 @@ import numpy as np
 from PIL import Image, ImageEnhance
 import argparse
 from pathlib import Path
+from docx import Document
+from docx.shared import Inches, Pt
+from docx.enum.section import WD_ORIENT
 
 
 
@@ -109,6 +112,41 @@ def adjust_contrast(img: Image.Image, factor: float) -> Image.Image:
     """Adjust image contrast using enhancement factor."""
     return ImageEnhance.Contrast(img).enhance(factor)
 
+        
+
+def create_docx(ascii_art:str, output_path:str):
+    # Create new document
+    doc = Document()
+
+    # Set page margins to zero
+    sections = doc.sections
+    for section in sections:
+        section.orientation = WD_ORIENT.LANDSCAPE
+        section.page_width = Inches(11.7)  # Swap width and height for landscape
+        section.page_height = Inches(8.3)
+        section.top_margin = Inches(0)
+        section.bottom_margin = Inches(0)
+        section.left_margin = Inches(0)
+        section.right_margin = Inches(0)
+
+    # Add ASCII art content
+    paragraph = doc.add_paragraph(ascii_art)
+
+    # Set font size to 3 (3pt)
+    for run in paragraph.runs:
+        run.font.size = Pt(6)
+
+     # Set line spacing to single (1 line)
+    paragraph.paragraph_format.line_spacing = 0.6 # can be <1
+    paragraph.paragraph_format.space_before = Pt(0)
+    paragraph.paragraph_format.space_after = Pt(0)
+
+    # Save document
+    #tmp_path = "/".join(output_path.split("/")[:-1]) + "/tmp.docx"
+    doc.save(output_path)
+    print(f"[*] Successfully saved to {output_path}")
+
+
 
 
 def main():
@@ -119,7 +157,6 @@ def main():
         img = Image.open(args.input)
         print(f"input size is {str(img.size)}")
         img = resize_image(img, 200)
-        breakpoint()
         if args.contrast != 1.0:
             img = adjust_contrast(img, args.contrast)
             
@@ -136,9 +173,11 @@ def main():
         print("[*] Generating ASCII art...")
         ascii_art = create_ascii_art(rescaled_arr, ink, args.density)
         
-        output_path = Path(args.output)
-        output_path.write_text(ascii_art)
-        print(f"[*] Successfully saved to {output_path}")
+        #_output_path = Path(args.output)
+        #_output_path.write_text(ascii_art)
+        #_print(f"[*] Successfully saved to {output_path}")
+
+        create_docx(ascii_art, args.output)
         
     except Exception as e:
         print(f"[!] Error: {str(e)}")
@@ -149,4 +188,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.txt -l special -d 1 -c 1.2
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.docx -l special -d 1 -c 1.2
