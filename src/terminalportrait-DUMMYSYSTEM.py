@@ -5,6 +5,7 @@ from pathlib import Path
 from docx import Document
 from docx.shared import Inches, Pt
 from docx.enum.section import WD_ORIENT
+from math import floor
 
 
 
@@ -25,6 +26,26 @@ INK_PALETTE = {
 }
 
 
+# key: pixel, value: point (font size)
+POINT_TO_PIXEL = {
+    "3" :2.25,
+    "4" :3,
+    "5" :3.75,
+    "6" :4.5,
+    "7" :5.25,
+    "8" :6,
+    "9" :6.75,
+    "9.333" :7,
+    "10" :7.5,
+    "10.667" :8,
+    "11" :8.25,
+    "12" :9,
+    "13" :9.75,
+    "13.33" :10
+}
+
+
+
 def parse_arguments():
     """Parse and validate command line arguments."""
     parser = argparse.ArgumentParser(description='Convert images to ASCII art')
@@ -36,6 +57,8 @@ def parse_arguments():
                        help='Character density (repetition count)')
     parser.add_argument('-c', '--contrast', type=float, default=1.0,
                        help='Contrast adjustment factor (default: 1.0)')
+    parser.add_argument('-r', '--resize', type=int,
+                       help='The new width if you want to resize the image. Must be < input image width.')
     return parser.parse_args()
 
 
@@ -112,9 +135,16 @@ def adjust_contrast(img: Image.Image, factor: float) -> Image.Image:
     """Adjust image contrast using enhancement factor."""
     return ImageEnhance.Contrast(img).enhance(factor)
 
-        
 
-def create_docx(ascii_art:str, output_path:str):
+
+def calculate_font_size(image_width:int, density:int) -> int:
+    int_A4_width = 3508
+    #int_A4_height = 2480
+    return POINT_TO_PIXEL[str(floor(int_A4_width / (density * image_width)))]
+
+
+
+def create_docx(ascii_art:str, font_size:float, output_path:str):
     # Create new document
     doc = Document()
 
@@ -134,10 +164,11 @@ def create_docx(ascii_art:str, output_path:str):
 
     # Set font size to 3 (3pt)
     for run in paragraph.runs:
-        run.font.size = Pt(6)
+        run.font.size = Pt(font_size)
+        run.font.character_spacing = Pt(-0.5)
 
      # Set line spacing to single (1 line)
-    paragraph.paragraph_format.line_spacing = 0.6 # can be <1
+    paragraph.paragraph_format.line_spacing = 0.5 # can be <1
     paragraph.paragraph_format.space_before = Pt(0)
     paragraph.paragraph_format.space_after = Pt(0)
 
@@ -151,34 +182,38 @@ def create_docx(ascii_art:str, output_path:str):
 
 def main():
     args = parse_arguments()
-    
+
     try:
         # Load and process image
         img = Image.open(args.input)
         print(f"input size is {str(img.size)}")
-        img = resize_image(img, 200)
+        if args.resize:
+            img = resize_image(img, args.resize)
+            print(f"[*] Image resize to: {str(img.size)}")
         if args.contrast != 1.0:
             img = adjust_contrast(img, args.contrast)
-            
+
         # Convert to grayscale matrix
         arr = np.array(img)
         print(f"[*] Input shape: {arr.shape}")
         grayscale_arr = get_grayscale_matrix(arr)
-        
+
         # Prepare ASCII conversion
         ink = INK_PALETTE[args.levels]
         rescaled_arr = rescale_matrix(grayscale_arr, len(ink))
-        
+
         # Generate and save ASCII art
         print("[*] Generating ASCII art...")
         ascii_art = create_ascii_art(rescaled_arr, ink, args.density)
-        
+
         #_output_path = Path(args.output)
         #_output_path.write_text(ascii_art)
         #_print(f"[*] Successfully saved to {output_path}")
 
-        create_docx(ascii_art, args.output)
-        
+        #font_size = calculate_font_size(img.size[0], args.density)
+        #print(f"[*] font size will be {font_size} pt")
+        create_docx(ascii_art, 4, args.output)
+
     except Exception as e:
         print(f"[!] Error: {str(e)}")
         raise
@@ -188,4 +223,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.docx -l special -d 1 -c 1.2
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.docx -l special -d 1 -c 1.2 -r 200
