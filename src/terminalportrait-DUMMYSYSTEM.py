@@ -162,18 +162,20 @@ def create_docx(ascii_art:str, font_size:float, output_path:str):
     # Add ASCII art content
     paragraph = doc.add_paragraph(ascii_art)
 
+    character_spacing = -0.5
     # Set font size to 3 (3pt)
     for run in paragraph.runs:
         run.font.size = Pt(font_size)
-        run.font.character_spacing = Pt(-0.5)
+        run.font.character_spacing = Pt(character_spacing)
 
-     # Set line spacing to single (1 line)
+    # Set line spacing to single (1 line)
     paragraph.paragraph_format.line_spacing = 0.5 # can be <1
     paragraph.paragraph_format.space_before = Pt(0)
     paragraph.paragraph_format.space_after = Pt(0)
 
     # Save document
     #tmp_path = "/".join(output_path.split("/")[:-1]) + "/tmp.docx"
+    output_path = f"{output_path.split(".docx")[0]}_fontsize_{font_size}_charspacing_{character_spacing}.docx"
     doc.save(output_path)
     print(f"[*] Successfully saved to {output_path}")
 
@@ -223,4 +225,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/marriage_540_x_382.jpg -o ../out/marriage_540_x_382.docx -l special -d 1 -c 1.2 -r 200
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.2 
