@@ -9,6 +9,25 @@ from math import floor
 
 
 
+
+def parse_arguments():
+    """Parse and validate command line arguments."""
+    parser = argparse.ArgumentParser(description='Convert images to ASCII art')
+    parser.add_argument('-i', '--input', required=True, help='Input image file path')
+    parser.add_argument('-o', '--output', required=True, help='Output text file path')
+    parser.add_argument('-l', '--levels', required=True, choices=INK_PALETTE.keys(),
+                       help='Number of grayscale levels (3-14)')
+    parser.add_argument('-d', '--density', type=int, required=True,
+                       help='Character density (repetition count)')
+    parser.add_argument('-c', '--contrast', type=float, default=1.0,
+                       help='Contrast adjustment factor (default: 1.0)')
+    parser.add_argument('-r', '--resize', type=int,
+                       help='The new width if you want to resize the image. Must be < input image width.')
+    return parser.parse_args()
+
+
+
+
 INK_PALETTE = {
     "14": "@MN§$%¤eo+;:,.",
     "13": "@MN§$%¤o+;:,.",
@@ -45,21 +64,11 @@ POINT_TO_PIXEL = {
 }
 
 
+LANDSCAPE_IN_INCH = {
+    "a4": (11.7, 8.3),
+    "a3": (16.5, 11.7)
+}
 
-def parse_arguments():
-    """Parse and validate command line arguments."""
-    parser = argparse.ArgumentParser(description='Convert images to ASCII art')
-    parser.add_argument('-i', '--input', required=True, help='Input image file path')
-    parser.add_argument('-o', '--output', required=True, help='Output text file path')
-    parser.add_argument('-l', '--levels', required=True, choices=INK_PALETTE.keys(),
-                       help='Number of grayscale levels (3-14)')
-    parser.add_argument('-d', '--density', type=int, required=True,
-                       help='Character density (repetition count)')
-    parser.add_argument('-c', '--contrast', type=float, default=1.0,
-                       help='Contrast adjustment factor (default: 1.0)')
-    parser.add_argument('-r', '--resize', type=int,
-                       help='The new width if you want to resize the image. Must be < input image width.')
-    return parser.parse_args()
 
 
 
@@ -152,8 +161,8 @@ def create_docx(ascii_art:str, font_size:float, output_path:str):
     sections = doc.sections
     for section in sections:
         section.orientation = WD_ORIENT.LANDSCAPE
-        section.page_width = Inches(11.7)  # Swap width and height for landscape
-        section.page_height = Inches(8.3)
+        section.page_width = Inches(LANDSCAPE_IN_INCH["a3"][0])
+        section.page_height = Inches(LANDSCAPE_IN_INCH["a3"][1])
         section.top_margin = Inches(0)
         section.bottom_margin = Inches(0)
         section.left_margin = Inches(0)
@@ -162,11 +171,11 @@ def create_docx(ascii_art:str, font_size:float, output_path:str):
     # Add ASCII art content
     paragraph = doc.add_paragraph(ascii_art)
 
-    character_spacing = -0.5
-    # Set font size to 3 (3pt)
+    #character_spacing = -1
+    # Set font size to 3 and char spacing
     for run in paragraph.runs:
         run.font.size = Pt(font_size)
-        run.font.character_spacing = Pt(character_spacing)
+        #run.font.character_spacing = Pt(character_spacing)
 
     # Set line spacing to single (1 line)
     paragraph.paragraph_format.line_spacing = 0.5 # can be <1
@@ -214,7 +223,7 @@ def main():
 
         #font_size = calculate_font_size(img.size[0], args.density)
         #print(f"[*] font size will be {font_size} pt")
-        create_docx(ascii_art, 4, args.output)
+        create_docx(ascii_art, 3, args.output)
 
     except Exception as e:
         print(f"[!] Error: {str(e)}")
@@ -225,4 +234,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.2 
+# try new ways of setting font spacing "https://stackoverflow.com/questions/70453019/python-docx-how-to-set-font-spacing/73466902#73466902"
+# and cf chatgpt conv
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.2 -r 300
