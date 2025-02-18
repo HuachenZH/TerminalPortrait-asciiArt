@@ -41,7 +41,7 @@ INK_PALETTE = {
     "5": "@$o:.",
     "4": "@o:.",
     "3": "@o:",
-    "special": "冉伊诺陈"
+    "special": "苒伊诺陈￥？！，"
 }
 
 
@@ -178,13 +178,13 @@ def create_docx(ascii_art:str, font_size:float, output_path:str):
         #run.font.character_spacing = Pt(character_spacing)
 
     # Set line spacing to single (1 line)
-    paragraph.paragraph_format.line_spacing = 0.5 # can be <1
+    paragraph.paragraph_format.line_spacing = 0.6 # can be <1
     paragraph.paragraph_format.space_before = Pt(0)
     paragraph.paragraph_format.space_after = Pt(0)
 
     # Save document
     #tmp_path = "/".join(output_path.split("/")[:-1]) + "/tmp.docx"
-    output_path = f"{output_path.split(".docx")[0]}_fontsize_{font_size}_charspacing_{character_spacing}.docx"
+    output_path = f"{output_path.split(".docx")[0]}_fontsize_{font_size}.docx"
     doc.save(output_path)
     print(f"[*] Successfully saved to {output_path}")
 
@@ -236,4 +236,6 @@ if __name__ == "__main__":
 
 # try new ways of setting font spacing "https://stackoverflow.com/questions/70453019/python-docx-how-to-set-font-spacing/73466902#73466902"
 # and cf chatgpt conv
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.2 -r 300
+
+# the following config works well: (size of input: 588 (width) * 416 (height))
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.01 -r 375 
