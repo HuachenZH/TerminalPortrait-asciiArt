@@ -41,7 +41,8 @@ INK_PALETTE = {
     "5": "@$o:.",
     "4": "@o:.",
     "3": "@o:",
-    "special": "苒伊诺陈￥？！，"
+    "special": "苒伊诺陈￥？！，",
+    "special2": "苒陈诺伊￥？！，"
 }
 
 
@@ -153,7 +154,7 @@ def calculate_font_size(image_width:int, density:int) -> int:
 
 
 
-def create_docx(ascii_art:str, font_size:float, output_path:str):
+def create_docx(ascii_art:str, font_size:float, args:argparse.Namespace) -> None:
     # Create new document
     doc = Document()
 
@@ -178,13 +179,13 @@ def create_docx(ascii_art:str, font_size:float, output_path:str):
         #run.font.character_spacing = Pt(character_spacing)
 
     # Set line spacing to single (1 line)
-    paragraph.paragraph_format.line_spacing = 0.6 # can be <1
+    line_spacing = 0.6 # can be <1
+    paragraph.paragraph_format.line_spacing = line_spacing
     paragraph.paragraph_format.space_before = Pt(0)
     paragraph.paragraph_format.space_after = Pt(0)
 
     # Save document
-    #tmp_path = "/".join(output_path.split("/")[:-1]) + "/tmp.docx"
-    output_path = f"{output_path.split(".docx")[0]}_fontsize_{font_size}.docx"
+    output_path = f"{args.output.split(".docx")[0]}_fontsize_{font_size}_verX_d{args.density}_c{args.contrast}_r{args.resize}_linespacing_{line_spacing}_palette_{args.levels}.docx"
     doc.save(output_path)
     print(f"[*] Successfully saved to {output_path}")
 
@@ -223,7 +224,7 @@ def main():
 
         #font_size = calculate_font_size(img.size[0], args.density)
         #print(f"[*] font size will be {font_size} pt")
-        create_docx(ascii_art, 3, args.output)
+        create_docx(ascii_art, 3, args)
 
     except Exception as e:
         print(f"[!] Error: {str(e)}")
