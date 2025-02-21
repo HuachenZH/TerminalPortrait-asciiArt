@@ -31,3 +31,10 @@ Technically the project is not complicate. It consists of:
 - Transform to grayscale.  
 - Each pixel corresponds to a RGB color value. According to the value, determine which character will be use. For depper color, use characters like "@", "M". For lighter color, use characters like ";", ".".  
 - Output to text.
+
+
+------------------------------
+(wow it's already three years later... in another city)
+parameters that work well:
+- "python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -c 1.01 -r 375"  
+  with font size 3, linespacing 0.6, output canva is landscape A3
