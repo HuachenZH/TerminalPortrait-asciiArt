@@ -42,7 +42,8 @@ INK_PALETTE = {
     "4": "@o:.",
     "3": "@o:",
     "special": "苒伊诺陈￥？！，",
-    "special2": "苒陈诺伊￥？！，"
+    "special2": "苒陈诺伊￥？！，",
+    "special3": "#éanvo+"
 }
 
 
