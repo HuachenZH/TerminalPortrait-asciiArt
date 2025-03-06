@@ -19,6 +19,8 @@ def parse_arguments():
                        help='Number of grayscale levels (3-14)')
     parser.add_argument('-f', '--fontSize', type=int, default=6,
                        help='Fontsize of output document (default: 6)')
+    parser.add_argument('-lsp', '--lineSpacing', type=float, default=0.6,
+                       help='Linespacing of output document (default: 0.6), can be <1')
     parser.add_argument('-d', '--density', type=int, required=True,
                        help='Character density (repetition count)')
     parser.add_argument('-c', '--contrast', type=float, default=1.0,
@@ -182,13 +184,12 @@ def create_docx(ascii_art:str, args:argparse.Namespace) -> None:
         #run.font.character_spacing = Pt(character_spacing)
 
     # Set line spacing to single (1 line)
-    line_spacing = 0.6 # can be <1
-    paragraph.paragraph_format.line_spacing = line_spacing
+    paragraph.paragraph_format.line_spacing = args.lineSpacing
     paragraph.paragraph_format.space_before = Pt(0)
     paragraph.paragraph_format.space_after = Pt(0)
 
     # Save document
-    output_path = f"{args.output.split(".docx")[0]}_fontsize_{args.fontSize}_verX_d{args.density}_c{args.contrast}_r{args.resize}_linespacing_{line_spacing}_palette_{args.levels}.docx"
+    output_path = f"{args.output.split(".docx")[0]}_fontsize_{args.fontSize}_verX_d{args.density}_c{args.contrast}_r{args.resize}_linespacing_{args.lineSpacing}_palette_{args.levels}.docx"
     doc.save(output_path)
     print(f"[*] Successfully saved to {output_path}")
 
