@@ -17,6 +17,8 @@ def parse_arguments():
     parser.add_argument('-o', '--output', required=True, help='Output text file path')
     parser.add_argument('-l', '--levels', required=True, choices=INK_PALETTE.keys(),
                        help='Number of grayscale levels (3-14)')
+    parser.add_argument('-f', '--fontSize', type=int, default=6,
+                       help='Fontsize of output document (default: 6)')
     parser.add_argument('-d', '--density', type=int, required=True,
                        help='Character density (repetition count)')
     parser.add_argument('-c', '--contrast', type=float, default=1.0,
@@ -155,7 +157,7 @@ def calculate_font_size(image_width:int, density:int) -> int:
 
 
 
-def create_docx(ascii_art:str, font_size:float, args:argparse.Namespace) -> None:
+def create_docx(ascii_art:str, args:argparse.Namespace) -> None:
     # Create new document
     doc = Document()
 
@@ -176,7 +178,7 @@ def create_docx(ascii_art:str, font_size:float, args:argparse.Namespace) -> None
     #character_spacing = -1
     # Set font size to 3 and char spacing
     for run in paragraph.runs:
-        run.font.size = Pt(font_size)
+        run.font.size = Pt(args.fontSize)
         #run.font.character_spacing = Pt(character_spacing)
 
     # Set line spacing to single (1 line)
@@ -186,7 +188,7 @@ def create_docx(ascii_art:str, font_size:float, args:argparse.Namespace) -> None
     paragraph.paragraph_format.space_after = Pt(0)
 
     # Save document
-    output_path = f"{args.output.split(".docx")[0]}_fontsize_{font_size}_verX_d{args.density}_c{args.contrast}_r{args.resize}_linespacing_{line_spacing}_palette_{args.levels}.docx"
+    output_path = f"{args.output.split(".docx")[0]}_fontsize_{args.fontSize}_verX_d{args.density}_c{args.contrast}_r{args.resize}_linespacing_{line_spacing}_palette_{args.levels}.docx"
     doc.save(output_path)
     print(f"[*] Successfully saved to {output_path}")
 
@@ -223,9 +225,9 @@ def main():
         #_output_path.write_text(ascii_art)
         #_print(f"[*] Successfully saved to {output_path}")
 
-        #font_size = calculate_font_size(img.size[0], args.density)
-        #print(f"[*] font size will be {font_size} pt")
-        create_docx(ascii_art, 6, args)
+        #args.fontSize = calculate_font_size(img.size[0], args.density)
+        #print(f"[*] font size will be {args.fontSize} pt")
+        create_docx(ascii_art, args)
 
     except Exception as e:
         print(f"[!] Error: {str(e)}")
@@ -238,7 +240,13 @@ if __name__ == "__main__":
 
 
 # the following config works well: (size of input: 588 (width) * 416 (height))  (A3 landscape)
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -c 1.01 -r 375 
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 3 -c 1.01 -r 375 
+# (linespacing 0.6)
 
 # fontsize 6:
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -c 1.01 -r 190
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 6 -c 1.01 -r 190
+# (linespacing 0.6)
+
+# fontsize 10:
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 10 -c 1.01 -r 115
+
