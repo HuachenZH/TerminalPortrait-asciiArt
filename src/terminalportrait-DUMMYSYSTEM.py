@@ -225,7 +225,7 @@ def main():
 
         #font_size = calculate_font_size(img.size[0], args.density)
         #print(f"[*] font size will be {font_size} pt")
-        create_docx(ascii_art, 3, args)
+        create_docx(ascii_art, 6, args)
 
     except Exception as e:
         print(f"[!] Error: {str(e)}")
@@ -236,8 +236,9 @@ def main():
 if __name__ == "__main__":
     main()
 
-# try new ways of setting font spacing "https://stackoverflow.com/questions/70453019/python-docx-how-to-set-font-spacing/73466902#73466902"
-# and cf chatgpt conv
 
-# the following config works well: (size of input: 588 (width) * 416 (height))
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special -d 1 -c 1.01 -r 375 
+# the following config works well: (size of input: 588 (width) * 416 (height))  (A3 landscape)
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -c 1.01 -r 375 
+
+# fontsize 6:
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -c 1.01 -r 190
