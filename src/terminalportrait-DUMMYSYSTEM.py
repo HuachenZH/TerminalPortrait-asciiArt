@@ -167,8 +167,8 @@ def create_docx(ascii_art:str, args:argparse.Namespace) -> None:
     sections = doc.sections
     for section in sections:
         section.orientation = WD_ORIENT.LANDSCAPE
-        section.page_width = Inches(LANDSCAPE_IN_INCH["a3"][0])
-        section.page_height = Inches(LANDSCAPE_IN_INCH["a3"][1])
+        section.page_width = Inches(LANDSCAPE_IN_INCH["a4"][0])
+        section.page_height = Inches(LANDSCAPE_IN_INCH["a4"][1])
         section.top_margin = Inches(0)
         section.bottom_margin = Inches(0)
         section.left_margin = Inches(0)
@@ -241,6 +241,7 @@ if __name__ == "__main__":
 
 
 # the following config works well: (size of input: 588 (width) * 416 (height))  (A3 landscape)
+# fontsize 3:
 # python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 3 -c 1.01 -r 375 -lsp 0.6
 
 # fontsize 6:
@@ -249,3 +250,11 @@ if __name__ == "__main__":
 # fontsize 10:
 # python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 10 -c 1.01 -r 115 -lsp 0.6
 
+
+# the following config works well: (size of input: 588 (width) * 416 (height))  (A4 landscape)
+# fontsize 3:
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 3 -c 1.01 -r 270 -lsp 0.6
+
+# fontsize 6:
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 6 -c 1.01 -r 150 -lsp 0.6
+# to resume: 150 is still too big
