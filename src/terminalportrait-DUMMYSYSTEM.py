@@ -256,5 +256,7 @@ if __name__ == "__main__":
 # python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 3 -c 1.01 -r 270 -lsp 0.6
 
 # fontsize 6:
-# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 6 -c 1.01 -r 150 -lsp 0.6
-# to resume: 150 is still too big
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 6 -c 1.01 -r 134 -lsp 0.6
+
+# fontsize 6:
+# python3 terminalportrait-DUMMYSYSTEM.py -i ../data/i_love_kirino_copy.jpg -o ../out/i_love_kirino_copy.docx -l special2 -d 1 -f 10 -c 1.01 -r 81 -lsp 0.6
